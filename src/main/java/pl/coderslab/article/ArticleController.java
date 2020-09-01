@@ -3,18 +3,22 @@ package pl.coderslab.article;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.author.Author;
 import pl.coderslab.author.AuthorService;
 import pl.coderslab.category.Category;
 import pl.coderslab.category.CategoryService;
 
+import javax.validation.Valid;
+import javax.validation.Validator;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/article")
 public class ArticleController {
+    public final Validator validator;
 
     private final ArticleService articleService;
     private final AuthorService authorService;
@@ -40,7 +44,10 @@ public class ArticleController {
         return "article/form";
     }
     @PostMapping("/form")
-    public String save(@ModelAttribute Article article) {
+    public String save(@Valid Article article, BindingResult result) {
+        if (result.hasErrors()) {
+            return "article/form";
+        }
         articleService.save(article);
         return "redirect:/article/all";
     }
@@ -51,9 +58,12 @@ public class ArticleController {
         return "article/form";
     }
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable long id, @ModelAttribute Article article) {
+    public String update(@Valid Article article, BindingResult result, @PathVariable long id) {
         if(id != article.getId()) {
             return "error";
+        }
+        if(result.hasErrors()) {
+            return "article/form";
         }
         articleService.update(article);
         return "redirect:/article/all";

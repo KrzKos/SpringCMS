@@ -9,12 +9,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
     <title>Title</title>
 </head>
 <body>
     <form:form modelAttribute="category" method="post">
-        Nazwa: <form:input path="name" />
-        Opis: <form:input path="description" />
+        <form:errors path="name" cssClass="error"/>
+        Nazwa: <form:input path="name"/><br>
+        <form:errors path="description" cssClass="error"/>
+        Opis: <form:input path="description" /><br>
         <button type="submit">Zapisz</button>
     </form:form>
 </body>

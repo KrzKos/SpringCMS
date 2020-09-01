@@ -10,6 +10,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -18,6 +19,7 @@ import pl.coderslab.author.AuthorConverter;
 import pl.coderslab.category.CategoryConverter;
 
 import javax.persistence.EntityManagerFactory;
+import javax.validation.Validator;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -68,5 +70,9 @@ public class AppConfig implements WebMvcConfigurer {
     @Bean
     public CategoryConverter getCategoryConverter() {
         return new CategoryConverter();
+    }
+    @Bean
+    public Validator validator() {
+        return new LocalValidatorFactoryBean();
     }
 }

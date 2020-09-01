@@ -3,12 +3,17 @@ package pl.coderslab.category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.Validator;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/category")
 public class CategoryController {
+    public final Validator validator;
     private final CategoryService categoryService;
 
     @GetMapping("/all")
@@ -23,7 +28,10 @@ public class CategoryController {
         return "category/form";
     }
     @PostMapping("/form")
-    public String addCategory(@ModelAttribute Category category){
+    public String addCategory(@Valid Category category, BindingResult result){
+        if(result.hasErrors()) {
+            return "category/form";
+        }
         categoryService.save(category);
         return "redirect:/category/all";
     }

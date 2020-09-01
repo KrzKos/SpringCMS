@@ -3,7 +3,10 @@ package pl.coderslab.author;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Controller
@@ -33,9 +36,12 @@ public class AuthorController {
         return "author/form";
     }
     @PostMapping("/edit/{id}")
-    public String update(@ModelAttribute Author author, @PathVariable long id) {
+    public String update(@ModelAttribute ("author") @Valid Author author, BindingResult result, @PathVariable long id) {
         if(id != author.getId()) {
             return "error";
+        }
+        if(result.hasErrors()) {
+            return "author/form";
         }
         authorService.update(author);
         return "redirect:/author/all";
